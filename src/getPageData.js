@@ -1,13 +1,4 @@
-import { fileURLToPath } from 'url';
 import axios from 'axios';
-import nock from 'nock';
-import fs from 'fs/promises';
-import path, { dirname }  from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const savePath = path.join(__dirname, '..', 'output' , 'downloaded_image.jpg');
 
 const getHTML = async (url) => {
   try {
@@ -24,7 +15,7 @@ const getContent = async (contentUrl) => {
     const response = await axios({
       method: 'get',
       url: contentUrl,
-      responseType: 'arraybuffer'
+      responseType: 'arraybuffer',
     });
     const fileData = Buffer.from(response.data, 'binary');
     return fileData;

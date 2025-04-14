@@ -12,4 +12,12 @@ const isExistedFolder = async (userPath) => {
   }
 };
 
-export { createFile, isExistedFolder };
+const createFolderIfNecessary = async (folderPath) => {
+  try {
+    await fs.access(folderPath, fs.constants.R_OK);
+  } catch (err) {
+    await fs.mkdir(folderPath);
+  }
+};
+
+export { createFile, isExistedFolder, createFolderIfNecessary };
