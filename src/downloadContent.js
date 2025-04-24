@@ -4,15 +4,23 @@ import path from 'path';
 import { getContent } from './getPageData.js';
 import { createFile } from './handleFilesTasks.js';
 
+const contentType = ['img', 'link', 'script'];
+
+const refTag = {
+  img: 'src',
+  link: 'href',
+  script: 'src',
+};
+
 const generateLocalSrcLink = (contentUrl, contentFolder) => {
-  const URLWithoutExt = contentUrl.href.substring(0, contentUrl.href.lastIndexOf('.'));
-  const extention = contentUrl.href.substring(contentUrl.href.lastIndexOf('.') + 1);
+  const extIndex = contentUrl.pathname.indexOf('.');
+  const extention = extIndex === -1 ? 'html' : contentUrl.pathname.substring(extIndex + 1);
+  const URLWithoutExt = extIndex === -1 ? contentUrl.href : contentUrl.href.substring(0, contentUrl.href.lastIndexOf('.'));
   const withoutHTTP = URLWithoutExt.substring(URLWithoutExt.indexOf('//') + 2);
   const fileName = `${_.replace(withoutHTTP, /[^0-9a-zA-Z]/g, '-')}.${extention}`;
   return [`${contentFolder}/${fileName}`, fileName];
 };
 
-// разобраться, что делать с www - его нет примерах хекслета
 const getHTTPSrcLink = (src, targetURLobj) => {
   if (!src) {
     return '';
@@ -22,9 +30,9 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   }
   if (!src.includes('http')) {
     const contentUrl = new URL(src, targetURLobj.origin);
-    if (!contentUrl.hostname.startsWith('www.')) {
+    /* if (!contentUrl.hostname.startsWith('www.')) {
       contentUrl.hostname = `www.${contentUrl.hostname}`;
-    }
+    } */
     return contentUrl.href;
   }
   return '';
@@ -33,23 +41,27 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html);
   const targetURLobj = new URL(targetURL);
-  $('img').each(async (i, element) => {
-    const $img = $(element);
-    const src = $img.attr('src');
-    const httpSrc = getHTTPSrcLink(src, targetURLobj);
-    if (httpSrc.length === 0) {
-      return;
-    }
-    console.log('httpSrc = ', httpSrc);
-    const contentUrl = new URL(httpSrc);
-    const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
-    console.log('newSrc=', newSrc);
-    const fullPath = path.join(contentPath, fileName);
-    $img.attr('src', newSrc);
-    const contentData = await getContent(contentUrl.href);
-    await createFile(fullPath, contentData);
+  contentType.forEach((tag) => {
+    $(tag).each(async (i, element) => {
+      const $tag = $(element);
+      const src = $tag.attr(refTag[tag]);
+      const httpSrc = getHTTPSrcLink(src, targetURLobj);
+      if (httpSrc.length === 0) {
+        return;
+      }
+      // console.log('tag = ', tag);
+      // console.log('httpSrc = ', httpSrc);
+      const contentUrl = new URL(httpSrc);
+      const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
+      const fullPath = path.join(contentPath, fileName);
+      $tag.attr(refTag[tag], newSrc);
+      // console.log('contentUrl.href = ', contentUrl.href);
+      const contentData = await getContent(contentUrl.href);
+      await createFile(fullPath, contentData);
+    });
   });
   return $.html();
 };
 
 export default downloadContent;
+export { contentType, refTag };
