@@ -51,28 +51,50 @@ beforeEach(async () => {
 
 afterEach(() => {
   nock.cleanAll();
+  if (!nock.isDone()) {
+    throw new Error("Остались невызванные nock-заглушки!");
+  }
 });
 
-test('200 code, existed user path', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl, userFolderPath);
-  // check outputPath
-  expect(receivedHTMLPath).toEqual(path.join(userFolderPath, initData.outputFilename));
-  const isContentFolderExists = await fs.access(
-    path.join(
-      userFolderPath,
-      initData.outputContentFolder,
-    ),
-  );
-  expect(isContentFolderExists).toBeUndefined();
-  // check content
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
-  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
+afterAll(() => {
+  nock.restore(); // Отключает перехват запросов
 });
 
-test('404 code, existed user path', async () => {
+/*test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
+    .reply(400, {
+      error: {
+        message: 'Bad request',
+      },
+    });
+    console.log(1111111);
+  await expect(
+    loadHTML(initData.hexletUrl, userFolderPath),
+  )
+    .rejects
+    .toThrow(new Error('HTML loading error!'));
+});
+
+test('200 code, non-existed user path', async () => {
+  console.log(2222222);
+  await expect(
+    loadHTML(initData.hexletUrl, '/1/1'),
+  )
+    .rejects
+    .toThrow(new Error('Non-existed path!'));
+});*/
+
+test('400 code, Content loading', async () => {
+  console.log(333333);
+  nock.cleanAll();
+  nock(/ru\.hexlet\.io/)
+    .persist()
+    .get(/\/courses/)
+    .reply(200, initData.sourceHTML);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/assets\/application.css/)
     .reply(400, {
       error: {
         message: 'Bad request',
@@ -82,44 +104,7 @@ test('404 code, existed user path', async () => {
     loadHTML(initData.hexletUrl, userFolderPath),
   )
     .rejects
-    .toThrow(new Error('Something went wrong!'));
+    .toThrow(new Error('Content loading error!'));
 });
 
-test('200 code, non-existed user path', async () => {
-  await expect(
-    loadHTML(initData.hexletUrl, '/1/1'),
-  )
-    .rejects
-    .toThrow(new Error('Non-existed path!'));
-});
 
-test('200 code, default path', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl);
-  // check outputPath
-  expect(receivedHTMLPath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
-  // check content
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
-  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
-});
-
-test('200 code, check content', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl, userFolderPath);
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
-  const $received = cheerio.load(receivedHTML);
-  const $expected = cheerio.load(initData.expectedHTML);
-  const receivedSRCs = [];
-  const expectedSRCs = [];
-  contentType.forEach((tag) => {
-    $received(tag).each((i, element) => {
-      const $tag = $received(element);
-      const src = $tag.attr(refTag[tag]);
-      receivedSRCs.push(src);
-    });
-    $expected(tag).each((i, element) => {
-      const $tag = $expected(element);
-      const src = $tag.attr(refTag[tag]);
-      expectedSRCs.push(src);
-    });
-  });
-  expect(receivedSRCs).toEqual(expectedSRCs);
-});

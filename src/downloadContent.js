@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import _ from 'lodash';
 import path from 'path';
+import debug from 'debug';
 import { getContent } from './getPageData.js';
 import { createFile } from './handleFilesTasks.js';
 
@@ -11,6 +12,8 @@ const refTag = {
   link: 'href',
   script: 'src',
 };
+
+const logLoader = debug('page-loader');
 
 const generateLocalSrcLink = (contentUrl, contentFolder) => {
   const extIndex = contentUrl.pathname.indexOf('.');
@@ -51,6 +54,9 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       }
       // console.log('tag = ', tag);
       // console.log('httpSrc = ', httpSrc);
+
+      logLoader(`src = ${src}`);
+      
       const contentUrl = new URL(httpSrc);
       const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
       const fullPath = path.join(contentPath, fileName);
