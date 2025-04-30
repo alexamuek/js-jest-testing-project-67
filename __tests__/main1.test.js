@@ -1,5 +1,4 @@
 import { fileURLToPath } from 'url';
-import axios from 'axios'
 import nock from 'nock';
 import path, { dirname } from 'path';
 import fs from 'fs/promises';
@@ -18,16 +17,11 @@ let userFolderPath;
 
 beforeAll(async () => {
   initData.sourceHTMLFile = 'sourceHTML.html';
-  initData.expectedHTMLFile = 'expected.html';
   initData.imageFile = 'nodejs.png';
   initData.css = 'application.css';
   initData.script = 'runtime.js';
   initData.hexletUrl = 'https://ru.hexlet.io/courses';
-  initData.outputFilename = 'ru-hexlet-io-courses.html';
-  initData.outputContentFolder = 'ru-hexlet-io-courses_files';
   initData.sourceHTML = await fs.readFile(getFixturePath(initData.sourceHTMLFile), { encoding: 'utf8' });
-  initData.expectedHTML = await fs.readFile(getFixturePath(initData.expectedHTMLFile), { encoding: 'utf8' });
-  initData.expectedImage = await fs.readFile(getFixturePath(initData.imageFile), { encoding: 'utf8' });
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' });
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' });
   initData.defaultPath = path.join(process.cwd(), 'output');

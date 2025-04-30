@@ -33,9 +33,6 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   }
   if (!src.includes('http')) {
     const contentUrl = new URL(src, targetURLobj.origin);
-    /* if (!contentUrl.hostname.startsWith('www.')) {
-      contentUrl.hostname = `www.${contentUrl.hostname}`;
-    } */
     return contentUrl.href;
   }
   return '';
@@ -65,6 +62,7 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
         throw new Error('Error of content loading');
         break;
       }
+      await createFile(fullPath, contentData);
     }
   };
   return $.html();
