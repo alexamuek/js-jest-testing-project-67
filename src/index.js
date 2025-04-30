@@ -8,6 +8,7 @@ import downloadContent from './downloadContent.js';
 const defaultPath = path.join(process.cwd(), 'output');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
+
   //console.log(url);
   //console.log(outputPath);
   await isExistedFolder(outputPath);

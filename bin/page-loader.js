@@ -7,7 +7,7 @@ import loadHTML from '../src/index.js';
 const main = async (url, output) => {
   const outputPath = await loadHTML(url, output);
   console.log({ filepath: outputPath });
-  process.exit(0);
+  //process.exit(0);
 };
 
 const defaultPath = path.join(process.cwd(), 'output');

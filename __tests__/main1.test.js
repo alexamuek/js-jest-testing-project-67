@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'url';
+import axios from 'axios'
 import nock from 'nock';
 import path, { dirname } from 'path';
 import fs from 'fs/promises';
@@ -39,9 +40,6 @@ beforeEach(async () => {
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
   nock(/ru\.hexlet\.io/)
-    .get(/\/professions/)
-    .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io/)
     .get(/\/assets\/application.css/)
     .reply(200, initData.expectedCSS);
   nock(/ru\.hexlet\.io/)
@@ -60,7 +58,7 @@ afterAll(() => {
   nock.restore(); // Отключает перехват запросов
 });
 
-/*test('400 code, HTML loading', async () => {
+test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
@@ -69,7 +67,6 @@ afterAll(() => {
         message: 'Bad request',
       },
     });
-    console.log(1111111);
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
@@ -78,23 +75,16 @@ afterAll(() => {
 });
 
 test('200 code, non-existed user path', async () => {
-  console.log(2222222);
   await expect(
     loadHTML(initData.hexletUrl, '/1/1'),
   )
     .rejects
     .toThrow(new Error('Non-existed path!'));
-});*/
+});
 
 test('400 code, Content loading', async () => {
-  console.log(333333);
-  nock.cleanAll();
-  nock(/ru\.hexlet\.io/)
-    .persist()
-    .get(/\/courses/)
-    .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/assets\/application.css/)
+  const scope = nock(/ru\.hexlet\.io/)
+    .get(/\/professions/)
     .reply(400, {
       error: {
         message: 'Bad request',

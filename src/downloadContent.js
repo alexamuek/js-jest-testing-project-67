@@ -44,28 +44,29 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html);
   const targetURLobj = new URL(targetURL);
-  contentType.forEach((tag) => {
-    $(tag).each(async (i, element) => {
+  for (let index = 0; index < contentType.length; index++) {
+    const itemContentType = contentType[index];  // tag
+    const arrayOfNodes = $(itemContentType).toArray(); // $(tag)
+    for (const element of arrayOfNodes) {
       const $tag = $(element);
-      const src = $tag.attr(refTag[tag]);
+      const src = $tag.attr(refTag[itemContentType]);
       const httpSrc = getHTTPSrcLink(src, targetURLobj);
       if (httpSrc.length === 0) {
-        return;
+        continue;
       }
-      // console.log('tag = ', tag);
-      // console.log('httpSrc = ', httpSrc);
-
-      logLoader(`src = ${src}`);
-      
+      logLoader(`content src from page = ${src}`);
       const contentUrl = new URL(httpSrc);
       const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
       const fullPath = path.join(contentPath, fileName);
-      $tag.attr(refTag[tag], newSrc);
-      // console.log('contentUrl.href = ', contentUrl.href);
+      $tag.attr(refTag[itemContentType], newSrc);
+      logLoader(`upgraded content src  = ${newSrc}`);
       const contentData = await getContent(contentUrl.href);
-      await createFile(fullPath, contentData);
-    });
-  });
+      if (!contentData) {
+        throw new Error('Error of content loading');
+        break;
+      }
+    }
+  };
   return $.html();
 };
 
