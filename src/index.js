@@ -8,9 +8,6 @@ import downloadContent from './downloadContent.js';
 const defaultPath = path.join(process.cwd(), 'output');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-
-  //console.log(url);
-  //console.log(outputPath);
   await isExistedFolder(outputPath);
   const html = await getHTML(url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
@@ -23,5 +20,7 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   await createFile(fullPathHTML, updatedHTML);
   return fullPathHTML;
 };
+
+await loadHTML('https://www.google.com/', '/home/alexamuek/Temp/output');
 
 export default loadHTML;

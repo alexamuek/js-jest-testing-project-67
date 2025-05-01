@@ -41,9 +41,51 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html);
   const targetURLobj = new URL(targetURL);
-  for (let index = 0; index < contentType.length; index++) {
-    const itemContentType = contentType[index];  // tag
-    const arrayOfNodes = $(itemContentType).toArray(); // $(tag)
+  for (let index = 0; index < contentType.length; index += 1) {
+    const itemContentType = contentType[index];
+    const arrayOfNodes = $(itemContentType).toArray();
+    const httpPromises = [];
+    for (const element of arrayOfNodes) {
+      const $tag = $(element);
+      const src = $tag.attr(refTag[itemContentType]);
+      const httpSrc = getHTTPSrcLink(src, targetURLobj);
+      if (httpSrc.length === 0) {
+        continue;
+      }
+      logLoader(`content src from page = ${src}`);
+      const contentUrl = new URL(httpSrc);
+      const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
+      const fullPath = path.join(contentPath, fileName);
+      $tag.attr(refTag[itemContentType], newSrc);
+      logLoader(`upgraded content src  = ${newSrc}`);
+      httpPromises.push({file: fullPath, content: getContent(contentUrl.href)
+        .then((content) => {return content})
+        .catch(() => {throw new Error('Error of content loading')})
+      });
+      /*if (!contentData) {
+        throw new Error('Error of content loading');
+      }
+      await createFile(fullPath, contentData);*/
+    }
+    //const promise = Promise.all(httpPromises)
+    const resolved = httpPromises.map((item) => {
+      const file = item.file;
+      const content = item.content
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+      return {filePath: file, fileContent: content};
+    });
+    console.log('resolved = ', resolved);
+  }
+  return $.html();
+};
+
+/*const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
+  const $ = cheerio.load(html);
+  const targetURLobj = new URL(targetURL);
+  for (let index = 0; index < contentType.length; index += 1) {
+    const itemContentType = contentType[index];
+    const arrayOfNodes = $(itemContentType).toArray();
     for (const element of arrayOfNodes) {
       const $tag = $(element);
       const src = $tag.attr(refTag[itemContentType]);
@@ -60,13 +102,12 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const contentData = await getContent(contentUrl.href);
       if (!contentData) {
         throw new Error('Error of content loading');
-        break;
       }
       await createFile(fullPath, contentData);
     }
-  };
+  }
   return $.html();
-};
+};*/
 
 export default downloadContent;
 export { contentType, refTag };
