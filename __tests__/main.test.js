@@ -99,5 +99,3 @@ test('200 code, check content', async () => {
   });
   expect(receivedSRCs).toEqual(expectedSRCs);
 });
-
-

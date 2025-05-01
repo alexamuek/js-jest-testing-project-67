@@ -3,10 +3,7 @@ import nock from 'nock';
 import path, { dirname } from 'path';
 import fs from 'fs/promises';
 import os from 'node:os';
-import _ from 'lodash';
-import * as cheerio from 'cheerio';
 import loadHTML from '../src/index.js';
-import { contentType, refTag } from '../src/downloadContent.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -43,13 +40,10 @@ beforeEach(async () => {
 
 afterEach(() => {
   nock.cleanAll();
-  if (!nock.isDone()) {
-    throw new Error("Остались невызванные nock-заглушки!");
-  }
 });
 
 afterAll(() => {
-  nock.restore(); // Отключает перехват запросов
+  nock.restore();
 });
 
 test('400 code, HTML loading', async () => {
@@ -77,7 +71,7 @@ test('200 code, non-existed user path', async () => {
 });
 
 test('400 code, Content loading', async () => {
-  const scope = nock(/ru\.hexlet\.io/)
+  nock(/ru\.hexlet\.io/)
     .get(/\/professions/)
     .reply(400, {
       error: {
@@ -90,5 +84,3 @@ test('400 code, Content loading', async () => {
     .rejects
     .toThrow(new Error('Content loading error!'));
 });
-
-

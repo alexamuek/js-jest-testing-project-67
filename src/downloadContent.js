@@ -38,13 +38,18 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   return '';
 };
 
+const resolve = async (filePath, url) => {
+  const content = await getContent(url);
+  await createFile(filePath, content);
+};
+
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html);
   const targetURLobj = new URL(targetURL);
+  const httpPromises = [];
   for (let index = 0; index < contentType.length; index += 1) {
     const itemContentType = contentType[index];
     const arrayOfNodes = $(itemContentType).toArray();
-    const httpPromises = [];
     for (const element of arrayOfNodes) {
       const $tag = $(element);
       const src = $tag.attr(refTag[itemContentType]);
@@ -58,25 +63,10 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const fullPath = path.join(contentPath, fileName);
       $tag.attr(refTag[itemContentType], newSrc);
       logLoader(`upgraded content src  = ${newSrc}`);
-      httpPromises.push({file: fullPath, content: getContent(contentUrl.href)
-        .then((content) => {return content})
-        .catch(() => {throw new Error('Error of content loading')})
-      });
-      /*if (!contentData) {
-        throw new Error('Error of content loading');
-      }
-      await createFile(fullPath, contentData);*/
+      httpPromises.push(resolve(fullPath, contentUrl.href));
     }
-    //const promise = Promise.all(httpPromises)
-    const resolved = httpPromises.map((item) => {
-      const file = item.file;
-      const content = item.content
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
-      return {filePath: file, fileContent: content};
-    });
-    console.log('resolved = ', resolved);
   }
+  Promise.all(httpPromises);
   return $.html();
 };
 

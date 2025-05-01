@@ -21,6 +21,4 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   return fullPathHTML;
 };
 
-await loadHTML('https://www.google.com/', '/home/alexamuek/Temp/output');
-
 export default loadHTML;
