@@ -46,58 +46,33 @@ const resolve = async (filePath, url) => {
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html);
   const targetURLobj = new URL(targetURL);
-  const httpPromises = [];
-  for (let index = 0; index < contentType.length; index += 1) {
-    const itemContentType = contentType[index];
-    const arrayOfNodes = $(itemContentType).toArray();
-    for (const element of arrayOfNodes) {
+  const httpPromises = contentType.reduce((acc, tag) => {
+    const arrayOfNodes = $(tag).toArray();
+    const promises = arrayOfNodes.map((element) => {
       const $tag = $(element);
-      const src = $tag.attr(refTag[itemContentType]);
+      const src = $tag.attr(refTag[tag]);
       const httpSrc = getHTTPSrcLink(src, targetURLobj);
       if (httpSrc.length === 0) {
-        continue;
+        return null;
       }
       logLoader(`content src from page = ${src}`);
       const contentUrl = new URL(httpSrc);
       const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
       const fullPath = path.join(contentPath, fileName);
-      $tag.attr(refTag[itemContentType], newSrc);
+      $tag.attr(refTag[tag], newSrc);
       logLoader(`upgraded content src  = ${newSrc}`);
-      httpPromises.push(resolve(fullPath, contentUrl.href));
-    }
+      return resolve(fullPath, contentUrl.href);
+    })
+      .filter((item) => item !== null);
+    return [...acc, ...promises];
+  }, []);
+  try {
+    await Promise.all(httpPromises);
+  } catch (error) {
+    throw new Error('Content loading error!');
   }
-  Promise.all(httpPromises);
   return $.html();
 };
-
-/*const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
-  const $ = cheerio.load(html);
-  const targetURLobj = new URL(targetURL);
-  for (let index = 0; index < contentType.length; index += 1) {
-    const itemContentType = contentType[index];
-    const arrayOfNodes = $(itemContentType).toArray();
-    for (const element of arrayOfNodes) {
-      const $tag = $(element);
-      const src = $tag.attr(refTag[itemContentType]);
-      const httpSrc = getHTTPSrcLink(src, targetURLobj);
-      if (httpSrc.length === 0) {
-        continue;
-      }
-      logLoader(`content src from page = ${src}`);
-      const contentUrl = new URL(httpSrc);
-      const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
-      const fullPath = path.join(contentPath, fileName);
-      $tag.attr(refTag[itemContentType], newSrc);
-      logLoader(`upgraded content src  = ${newSrc}`);
-      const contentData = await getContent(contentUrl.href);
-      if (!contentData) {
-        throw new Error('Error of content loading');
-      }
-      await createFile(fullPath, contentData);
-    }
-  }
-  return $.html();
-};*/
 
 export default downloadContent;
 export { contentType, refTag };
