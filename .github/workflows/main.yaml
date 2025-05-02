@@ -1,0 +1,20 @@
+name: main
+on: push
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@main
+      - name: install
+        run: make install
+      - name: test
+        run: make test
+      - name: lint
+        run: make lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: install
+      run: make install
