@@ -38,7 +38,7 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   return '';
 };
 
-const resolve = async (filePath, url) => {
+const resolveAndSave = async (filePath, url) => {
   const content = await getContent(url);
   await createFile(filePath, content);
 };
@@ -60,8 +60,8 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
       const fullPath = path.join(contentPath, fileName);
       $tag.attr(refTag[tag], newSrc);
-      logLoader(`upgraded content src  = ${newSrc}`);
-      return resolve(fullPath, contentUrl.href);
+      logLoader(`stored content file: ${newSrc}`);
+      return resolveAndSave(fullPath, contentUrl.href);
     })
       .filter((item) => item !== null);
     return [...acc, ...promises];
