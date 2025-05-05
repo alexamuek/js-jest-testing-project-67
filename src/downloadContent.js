@@ -52,6 +52,7 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const $tag = $(element);
       const src = $tag.attr(refTag[tag]);
       const httpSrc = getHTTPSrcLink(src, targetURLobj);
+      console.log('src=', httpSrc);
       if (httpSrc.length === 0) {
         return null;
       }
@@ -69,6 +70,7 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   try {
     await Promise.all(httpPromises);
   } catch (error) {
+    console.error('downloadContent error = ', error);
     throw new Error('Content loading error!');
   }
   return $.html();

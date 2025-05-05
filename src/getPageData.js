@@ -24,6 +24,7 @@ const getContent = async (contentUrl) => {
     const fileData = Buffer.from(response.data, 'binary');
     return fileData;
   } catch (error) {
+    console.error('getContent error = ', error);
     console.error(`Content for ${contentUrl} could not be loaded`);
     throw new Error('Content loading error!');
   }
