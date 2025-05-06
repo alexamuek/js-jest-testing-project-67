@@ -80,8 +80,8 @@ test('400 code, Content loading', async () => {
         message: 'Bad request',
       },
     });
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl);
-  expect(receivedHTMLPath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
+  const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
+  expect(receivedHTMLPathObj.filepath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
 });
 
 test('no connection', async () => {

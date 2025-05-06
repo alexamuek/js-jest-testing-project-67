@@ -5,8 +5,8 @@ import process from 'node:process';
 import loadHTML from '../src/index.js';
 
 const main = async (url, output) => {
-  const outputPath = await loadHTML(url, output);
-  console.log(`Page was successfully downloaded into ${outputPath}`);
+  const pathObj = await loadHTML(url, output);
+  console.log(`Page was successfully downloaded into ${pathObj.filepath}`);
 };
 
 const defaultPath = path.join(process.cwd(), 'output');

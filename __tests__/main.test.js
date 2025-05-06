@@ -55,9 +55,9 @@ afterEach(() => {
 });
 
 test('200 code, existed user path', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl, userFolderPath);
+  const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   // check outputPath
-  expect(receivedHTMLPath).toEqual(path.join(userFolderPath, initData.outputFilename));
+  expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename));
   const isContentFolderExists = await fs.access(
     path.join(
       userFolderPath,
@@ -66,22 +66,22 @@ test('200 code, existed user path', async () => {
   );
   expect(isContentFolderExists).toBeUndefined();
   // check content
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
+  const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
 test('200 code, default path', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl);
+  const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
-  expect(receivedHTMLPath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
+  expect(receivedHTMLPathObj.filepath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
   // check content
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
+  const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
 test('200 code, check content', async () => {
-  const receivedHTMLPath = await loadHTML(initData.hexletUrl, userFolderPath);
-  const receivedHTML = await fs.readFile(receivedHTMLPath, { encoding: 'utf8' });
+  const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
+  const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   const $received = cheerio.load(receivedHTML);
   const $expected = cheerio.load(initData.expectedHTML);
   const receivedSRCs = [];

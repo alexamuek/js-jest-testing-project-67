@@ -19,7 +19,7 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   const fullPathHTML = path.join(outputPath, fileName);
   const updatedHTML = await downloadContent(html, folderPath, url, contentFolderName);
   await createFile(fullPathHTML, updatedHTML);
-  return fullPathHTML;
+  return {filepath: fullPathHTML};
 };
 
 export default loadHTML;
