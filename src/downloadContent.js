@@ -40,7 +40,11 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 
 const resolveAndSave = async (filePath, url) => {
   const content = await getContent(url);
-  await createFile(filePath, content);
+  if (!content) {
+    return;
+  } else {
+    await createFile(filePath, content);
+  }
 };
 
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
@@ -67,12 +71,7 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       .filter((item) => item !== null);
     return [...acc, ...promises];
   }, []);
-  try {
-    await Promise.all(httpPromises);
-  } catch (error) {
-    console.error('downloadContent error = ', error);
-    throw new Error('Content loading error!');
-  }
+  await Promise.all(httpPromises);
   return $.html();
 };
 

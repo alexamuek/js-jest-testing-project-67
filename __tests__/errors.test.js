@@ -22,10 +22,12 @@ beforeAll(async () => {
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' });
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' });
   initData.defaultPath = path.join(process.cwd(), 'output');
+  initData.outputFilename = 'ru-hexlet-io-courses.html';
 });
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
+  nock.disableNetConnect();
   nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
@@ -78,9 +80,15 @@ test('400 code, Content loading', async () => {
         message: 'Bad request',
       },
     });
+  const receivedHTMLPath = await loadHTML(initData.hexletUrl);
+  expect(receivedHTMLPath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
+});
+
+test('no connection', async () => {
+  nock.cleanAll();
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
     .rejects
-    .toThrow(new Error('Content loading error!'));
+    .toThrow(new Error('HTML loading error!'));
 });

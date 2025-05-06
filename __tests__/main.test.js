@@ -34,6 +34,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
+  nock.disableNetConnect();
   nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
