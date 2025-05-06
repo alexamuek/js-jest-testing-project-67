@@ -41,8 +41,10 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 const resolveAndSave = async (filePath, url) => {
   const content = await getContent(url);
   if (!content) {
+    console.log(`Content is empty! content url = ${url}`);
     return;
   } else {
+    console.log(`Try to save content, filePath = ${filePath},  content url =  ${url}!`);
     await createFile(filePath, content);
   }
 };
@@ -56,7 +58,7 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const $tag = $(element);
       const src = $tag.attr(refTag[tag]);
       const httpSrc = getHTTPSrcLink(src, targetURLobj);
-      console.log('src=', httpSrc);
+      console.log('content src=', httpSrc);
       if (httpSrc.length === 0) {
         return null;
       }
