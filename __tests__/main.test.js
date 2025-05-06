@@ -73,7 +73,8 @@ test('200 code, existed user path', async () => {
 test('200 code, default path', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
-  expect(receivedHTMLPathObj.filepath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
+  expect(receivedHTMLPathObj.filepath)
+    .toEqual(path.join(initData.defaultPath, initData.outputFilename));
   // check content
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));

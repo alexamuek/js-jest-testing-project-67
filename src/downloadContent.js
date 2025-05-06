@@ -42,7 +42,7 @@ const resolveAndSave = async (filePath, url) => {
   const content = await getContent(url);
   if (!content) {
     console.log(`Content is empty! content url = ${url}`);
-    return;
+    // return;
   } else {
     console.log(`Try to save content, filePath = ${filePath},  content url =  ${url}!`);
     await createFile(filePath, content);

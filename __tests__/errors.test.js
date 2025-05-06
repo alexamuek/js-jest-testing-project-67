@@ -81,7 +81,8 @@ test('400 code, Content loading', async () => {
       },
     });
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
-  expect(receivedHTMLPathObj.filepath).toEqual(path.join(initData.defaultPath, initData.outputFilename));
+  expect(receivedHTMLPathObj.filepath)
+    .toEqual(path.join(initData.defaultPath, initData.outputFilename));
 });
 
 test('no connection', async () => {
