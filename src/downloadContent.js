@@ -38,12 +38,13 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   return '';
 };
 
-const resolveAndSave = async (filePath, url) => {
+const resolveAndSave = async (filePath, url, $tag, srcName, newLink) => {
   const content = await getContent(url);
   if (!content) {
     console.log(`Content is empty! content url = ${url}`);
     // return;
   } else {
+    $tag.attr(srcName, newLink);
     console.log(`Try to save content, filePath = ${filePath},  content url =  ${url}!`);
     await createFile(filePath, content);
   }
@@ -66,9 +67,10 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
       const contentUrl = new URL(httpSrc);
       const [newSrc, fileName] = generateLocalSrcLink(contentUrl, contentFolder);
       const fullPath = path.join(contentPath, fileName);
-      $tag.attr(refTag[tag], newSrc);
+      // $tag.attr(refTag[tag], newSrc);
       logLoader(`stored content file: ${newSrc}`);
-      return resolveAndSave(fullPath, contentUrl.href);
+      // return resolveAndSave(fullPath, contentUrl.href);
+      return resolveAndSave(fullPath, contentUrl.href, $tag, refTag[tag], newSrc);
     })
       .filter((item) => item !== null);
     return [...acc, ...promises];
