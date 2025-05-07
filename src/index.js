@@ -8,7 +8,9 @@ import downloadContent from './downloadContent.js';
 const defaultPath = process.cwd(); // path.join(process.cwd(), 'output');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-  await isExistedFolder(outputPath);
+  if (outputPath !== defaultPath) {
+    await isExistedFolder(outputPath);
+  }
   const html = await getHTML(url);
   console.log('html_url = ', url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
