@@ -29,7 +29,7 @@ beforeAll(async () => {
   initData.expectedImage = await fs.readFile(getFixturePath(initData.imageFile), { encoding: 'utf8' });
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' });
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' });
-  initData.defaultPath = path.join(process.cwd(), 'output');
+  initData.defaultPath = process.cwd(); // path.join(process.cwd(), 'output');
 });
 
 beforeEach(async () => {
