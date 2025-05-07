@@ -21,9 +21,9 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   await createFolderIfNecessary(folderPath);
   const fullPathHTML = path.join(outputPath, fileName);
   console.log('fullPathHTML = ', fullPathHTML);
-  await fs.access(fullPathHTML, fs.constants.R_OK);
   const updatedHTML = await downloadContent(html, folderPath, url, contentFolderName);
   await createFile(fullPathHTML, updatedHTML);
+  await fs.access(fullPathHTML, fs.constants.R_OK);
   return { filepath: fullPathHTML };
 };
 
