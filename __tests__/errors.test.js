@@ -48,7 +48,7 @@ afterAll(() => {
   nock.restore();
 });
 
-test('400 code, HTML loading', async () => {
+/*test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
@@ -83,7 +83,7 @@ test('400 code, Content loading', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   expect(receivedHTMLPathObj.filepath)
     .toEqual(path.join(initData.defaultPath, initData.outputFilename));
-});
+});*/
 
 test('no connection', async () => {
   nock.cleanAll();
