@@ -5,6 +5,7 @@ const createFile = async (filePath, fileData) => {
 };
 
 const isExistedFolder = async (userPath) => {
+  console.log('userPath = ', userPath);
   try {
     await fs.access(userPath, fs.constants.R_OK);
   } catch (err) {
