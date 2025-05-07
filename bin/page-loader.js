@@ -4,12 +4,16 @@ import path from 'path';
 import process from 'node:process';
 import loadHTML from '../src/index.js';
 
-const main = async (url, output) => {
+const defaultPath = path.join(process.cwd(), 'bin');
+console.log('defaultPath = ', defaultPath);
+
+const main = async (url, output = defaultPath) => {
+  console.log('output =====', output);
   const pathObj = await loadHTML(url, output);
   console.log(`Page was successfully downloaded into ${pathObj.filepath}`);
 };
 
-const defaultPath = path.join(process.cwd(), 'output');
+//const defaultPath = path.join(process.cwd(), 'output');
 
 program
   .description('Load page')

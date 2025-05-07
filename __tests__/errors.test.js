@@ -21,7 +21,7 @@ beforeAll(async () => {
   initData.sourceHTML = await fs.readFile(getFixturePath(initData.sourceHTMLFile), { encoding: 'utf8' });
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' });
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' });
-  initData.defaultPath = process.cwd(); // path.join(process.cwd(), 'output');
+  initData.defaultPath = path.join(process.cwd(), 'bin');
   initData.outputFilename = 'ru-hexlet-io-courses.html';
 });
 

@@ -6,12 +6,11 @@ import { getHTML } from './getPageData.js';
 import { createFile, isExistedFolder, createFolderIfNecessary } from './handleFilesTasks.js';
 import downloadContent from './downloadContent.js';
 
-const defaultPath = process.cwd(); // path.join(process.cwd(), 'output');
+ const defaultPath = path.join(process.cwd(), 'bin');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-  if (outputPath !== defaultPath) {
-    await isExistedFolder(outputPath);
-  }
+  console.log('outputPath=!!!!!! ', outputPath);
+  await isExistedFolder(outputPath);
   const html = await getHTML(url);
   console.log('html_url = ', url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
