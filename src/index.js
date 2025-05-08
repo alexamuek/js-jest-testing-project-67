@@ -20,6 +20,9 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   const contentFolderName = `${_.replace(URLwithoutProtocol, /[^0-9a-zA-Z]/g, '-')}_files`;
   const folderPath = path.join(outputPath, contentFolderName);
   await createFolderIfNecessary(folderPath);
+  // check created contentFolder
+  await isExistedFolder(folderPath);
+  // 
   const fullPathHTML = path.join(outputPath, fileName);
   console.log('fullPathHTML in loadHTML= ', fullPathHTML);
   console.log('folderPath in loadHTML= ', folderPath);
