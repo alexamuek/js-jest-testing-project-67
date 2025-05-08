@@ -9,12 +9,12 @@ import downloadContent from './downloadContent.js';
  const defaultPath = path.join(process.cwd(), 'bin');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-  console.log('outputPath=!!!!!! ', outputPath);
+  console.log('outputPath in loadHTML = ', outputPath);
   if (outputPath!==defaultPath) {
     await isExistedFolder(outputPath);
   } 
   const html = await getHTML(url);
-  console.log('html_url = ', url);
+  console.log('inputHtmlUrl = ', url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
   const fileName = `${_.replace(URLwithoutProtocol, /[^0-9a-zA-Z]/g, '-')}.html`;
   const contentFolderName = `${_.replace(URLwithoutProtocol, /[^0-9a-zA-Z]/g, '-')}_files`;
@@ -22,6 +22,7 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   await createFolderIfNecessary(folderPath);
   const fullPathHTML = path.join(outputPath, fileName);
   console.log('fullPathHTML = ', fullPathHTML);
+  console.log('folderPath = ', folderPath);
   const updatedHTML = await downloadContent(html, folderPath, url, contentFolderName);
   await createFile(fullPathHTML, updatedHTML);
   await fs.access(fullPathHTML, fs.constants.R_OK);
