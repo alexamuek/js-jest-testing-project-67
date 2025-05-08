@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 
 const createFile = async (filePath, fileData) => {
+  console.log('mark!! in createFile');
   await fs.writeFile(filePath, fileData);
 };
 
