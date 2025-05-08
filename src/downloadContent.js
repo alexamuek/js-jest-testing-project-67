@@ -30,7 +30,7 @@ const getHTTPSrcLink = (src, targetURLobj) => {
   if (!src) {
     return '';
   }
-  if (src.includes(targetURLobj.host)) {
+  if (src.includes(targetURLobj.origin)) {
     console.log('return src mark')
     return src;
   }
