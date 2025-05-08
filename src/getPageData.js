@@ -16,7 +16,6 @@ const getHTML = async (url) => {
 };
 
 const getContent = async (contentUrl) => {
-  console.log(`in getContent input url:`, contentUrl);
   try {
     const response = await axios({
       method: 'get',

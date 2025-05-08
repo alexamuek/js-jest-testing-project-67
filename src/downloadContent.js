@@ -31,7 +31,6 @@ const getHTTPSrcLink = (src, targetURLobj) => {
     return '';
   }
   if (src.includes(targetURLobj.origin)) {
-    console.log('return src mark')
     return src;
   }
   if (!src.includes('http')) {

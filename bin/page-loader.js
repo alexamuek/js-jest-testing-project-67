@@ -4,7 +4,7 @@ import path from 'path';
 import process from 'node:process';
 import loadHTML from '../src/index.js';
 
-const defaultPath = path.join(process.cwd(), 'bin');
+const defaultPath = process.cwd(); // path.join(process.cwd(), 'bin');
 console.log('defaultPath = ', defaultPath);
 
 const main = async (url, output = defaultPath) => {
