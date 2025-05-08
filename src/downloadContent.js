@@ -25,10 +25,13 @@ const generateLocalSrcLink = (contentUrl, contentFolder) => {
 };
 
 const getHTTPSrcLink = (src, targetURLobj) => {
+  console.log('src in getHTTPSrcLink: ', src);
+  console.log('targetURLobj in getHTTPSrcLink: ', targetURLobj);
   if (!src) {
     return '';
   }
   if (src.includes(targetURLobj.host)) {
+    console.log('return src mark')
     return src;
   }
   if (!src.includes('http')) {
@@ -39,9 +42,10 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 };
 
 const resolveAndSave = async (filePath, url, $tag, srcName, newLink) => {
+
   const content = await getContent(url);
   if (!content) {
-    // console.log(`Content is empty! content url = ${url}`);
+    console.log(`Content is empty! content url = ${url}`);
     // return;
   } else {
     $tag.attr(srcName, newLink);
