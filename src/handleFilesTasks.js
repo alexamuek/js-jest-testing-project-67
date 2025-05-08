@@ -20,6 +20,7 @@ const createFolderIfNecessary = async (folderPath) => {
   } catch (err) {
     console.log(`create folder for content ${folderPath}`)
     await fs.mkdir(folderPath);
+    console.log('mark!! finish22');
   }
 };
 
