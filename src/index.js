@@ -9,7 +9,8 @@ import downloadContent from './downloadContent.js';
  const defaultPath = path.join(process.cwd(), 'bin');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-  console.log('outputPath in loadHTML = ', outputPath);
+  // console.log('outputPath in loadHTML = ', outputPath);
+  console.log(`input user url: `, url);
   if (outputPath!==defaultPath) {
     await isExistedFolder(outputPath);
   } 
@@ -24,8 +25,8 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   await isExistedFolder(folderPath);
   // 
   const fullPathHTML = path.join(outputPath, fileName);
-  console.log('fullPathHTML in loadHTML= ', fullPathHTML);
-  console.log('folderPath in loadHTML= ', folderPath);
+  // console.log('fullPathHTML in loadHTML= ', fullPathHTML);
+  // console.log('folderPath in loadHTML= ', folderPath);
   const updatedHTML = await downloadContent(html, folderPath, url, contentFolderName);
   await createFile(fullPathHTML, updatedHTML);
   await fs.access(fullPathHTML, fs.constants.R_OK);

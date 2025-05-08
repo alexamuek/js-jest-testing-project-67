@@ -58,8 +58,9 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
     const promises = arrayOfNodes.map((element) => {
       const $tag = $(element);
       const src = $tag.attr(refTag[tag]);
+      console.log(`content src from html document:`, src);
       const httpSrc = getHTTPSrcLink(src, targetURLobj);
-      // console.log('content src=', httpSrc);
+      console.log('full content src=', httpSrc);
       if (httpSrc.length === 0) {
         return null;
       }
