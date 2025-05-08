@@ -21,7 +21,12 @@ const loadHTML = async (url, outputPath = defaultPath) => {
   const folderPath = path.join(outputPath, contentFolderName);
   await createFolderIfNecessary(folderPath);
   // check created contentFolder
-  //await isExistedFolder(folderPath);
+  try {
+    await isExistedFolder(folderPath);  
+  } catch(error) {
+    console.log('folder content does not exists', folderPath);
+  }
+  
   // 
   const fullPathHTML = path.join(outputPath, fileName);
   // console.log('fullPathHTML in loadHTML= ', fullPathHTML);
