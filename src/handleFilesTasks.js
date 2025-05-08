@@ -19,7 +19,7 @@ const createFolderIfNecessary = async (folderPath) => {
     await fs.access(folderPath, fs.constants.R_OK);
   } catch (err) {
     console.log(`create folder for content ${folderPath}`)
-    await fs.mkdir(folderPath);
+    await fs.mkdir(folderPath, { recursive: true });
     console.log('mark!! finish22');
   }
 };
