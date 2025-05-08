@@ -64,12 +64,12 @@ afterAll(() => {
     .toThrow(new Error('HTML loading error!'));
 });
 
-test('200 code, non-existed user path', async () => {
+test('200 code, non-existed user folder', async () => {
   await expect(
     loadHTML(initData.hexletUrl, '/1/1'),
   )
     .rejects
-    .toThrow(new Error('Non-existed path!'));
+    .toThrow(new Error('Non-existed folder!'));
 });
 
 test('400 code, Content loading', async () => {

@@ -10,7 +10,9 @@ import downloadContent from './downloadContent.js';
 
 const loadHTML = async (url, outputPath = defaultPath) => {
   console.log('outputPath=!!!!!! ', outputPath);
-  await isExistedFolder(outputPath);
+  if (outputPath!==defaultPath) {
+    await isExistedFolder(outputPath);
+  } 
   const html = await getHTML(url);
   console.log('html_url = ', url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
@@ -27,3 +29,4 @@ const loadHTML = async (url, outputPath = defaultPath) => {
 };
 
 export default loadHTML;
+

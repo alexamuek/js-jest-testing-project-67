@@ -11,7 +11,7 @@ const isExistedFolder = async (userPath) => {
   } catch (err) {
     console.log('userPath = ', userPath);
     console.error('User filled in the non-existed path to save a page');
-    throw new Error('Non-existed path!');
+    throw new Error('Non-existed folder!');
   }
 };
 
