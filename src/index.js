@@ -9,13 +9,12 @@ import downloadContent from './downloadContent.js';
  const defaultPath = path.join(process.cwd(), 'bin');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
-  // console.log('outputPath in loadHTML = ', outputPath);
+  console.log('outputPath in loadHTML = ', outputPath);
   console.log(`input user url: `, url);
   if (outputPath!==defaultPath) {
     await isExistedFolder(outputPath);
   } 
   const html = await getHTML(url);
-  console.log('inputHtmlUrl = ', url);
   const URLwithoutProtocol = url.substring(url.indexOf('//') + 2);
   const fileName = `${_.replace(URLwithoutProtocol, /[^0-9a-zA-Z]/g, '-')}.html`;
   const contentFolderName = `${_.replace(URLwithoutProtocol, /[^0-9a-zA-Z]/g, '-')}_files`;
