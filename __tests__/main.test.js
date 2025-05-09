@@ -58,7 +58,7 @@ afterEach(() => {
 test('200 code, existed user path to save', async () => {
   //nock.cleanAll();
   nock.disableNetConnect();
-  nock('https://ru.hexlet.io')
+  nock('https://ru.hexlet.io:443')
     .get('/courses')
     //.times(2)
     .reply(200, initData.sourceHTML);
@@ -72,7 +72,7 @@ test('200 code, existed user path to save', async () => {
   nock(/ru\.hexlet\.io:443/)
     .get(/\/packs/)
     .reply(200, initData.expectedScript);*/
-  const response = await axios.get(initData.hexletUrl);
+  const response = await axios.get('https://ru.hexlet.io:443/courses');
   console.log(response.data);
   expect(1).toEqual(1);
   /*const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
