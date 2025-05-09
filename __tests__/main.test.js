@@ -58,17 +58,17 @@ afterEach(() => {
 test('200 code, existed user path to save', async () => {
   nock.cleanAll();
   nock.disableNetConnect();
-  nock(/ru\.hexlet\.io/)
+  nock(/ru\.hexlet\.io:443/)
     .persist()
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
+  nock(/ru\.hexlet\.io:443/)
     .get(/\/professions/)
     .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io/)
+  nock(/ru\.hexlet\.io:443/)
     .get(/\/assets\/application.css/)
     .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io/)
+  nock(/ru\.hexlet\.io:443/)
     .get(/\/packs/)
     .reply(200, initData.expectedScript);
   const response = await axios.get(initData.hexletUrl);
