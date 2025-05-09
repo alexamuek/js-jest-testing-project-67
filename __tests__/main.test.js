@@ -58,8 +58,8 @@ afterEach(() => {
 test('200 code, existed user path to save', async () => {
   //nock.cleanAll();
   nock.disableNetConnect();
-  const mock = nock('https://ru.hexlet.io:443')
-    .get(/\/courses\/?/)
+  const mock = nock('https://ru.hexlet.io')
+    .get('/courses/')
     //.times(2)
     .reply(200, initData.sourceHTML);
   console.log('here!!!', nock.activeMocks());
@@ -72,7 +72,7 @@ test('200 code, existed user path to save', async () => {
   nock(/ru\.hexlet\.io:443/)
     .get(/\/packs/)
     .reply(200, initData.expectedScript);*/
-  const response = await axios.get('https://ru.hexlet.io:443/courses');
+  const response = await axios.get('https://ru.hexlet.io/courses/');
   expect(mock.isDone()).toBe(true);
   console.log(response.data);
   expect(1).toEqual(1);
