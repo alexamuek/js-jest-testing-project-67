@@ -35,7 +35,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
-  nock.disableNetConnect();
+  // nock.disableNetConnect();
   nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
@@ -57,6 +57,7 @@ afterEach(() => {
 
 test('200 code, existed user path to save', async () => {
   nock.cleanAll();
+  nock.disableNetConnect();
   nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
