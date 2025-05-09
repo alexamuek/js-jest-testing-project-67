@@ -73,13 +73,11 @@ afterEach(() => {
 test('200 code, default path', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
-  /*expect(receivedHTMLPathObj.filepath)
+  expect(receivedHTMLPathObj.filepath)
     .toEqual(path.join(initData.defaultPath, initData.outputFilename));
   // check content
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
-  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));*/
-  await expect(fs.access(path.join(initData.defaultPath, initData.outputFilename)))
-    .resolves.not.toThrow()
+  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
 /*test('200 code, check content', async () => {
