@@ -41,14 +41,13 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 };
 
 const resolveAndSave = async (filePath, url, $tag, srcName, newLink) => {
-
   const content = await getContent(url);
   if (!content) {
     console.log(`Content is empty! content url = ${url}`);
     // return;
   } else {
     $tag.attr(srcName, newLink);
-    //console.log(`Try to save content, filePath = ${filePath},  content url =  ${url}!`);
+    // console.log(`Try to save content, filePath = ${filePath},  content url =  ${url}!`);
     await createFile(filePath, content);
   }
 };

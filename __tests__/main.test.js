@@ -54,7 +54,7 @@ afterEach(() => {
   nock.cleanAll();
 });
 
-/*test('200 code, existed user path', async () => {
+test('200 code, existed user path to save', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   // check outputPath
   expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename));
@@ -68,9 +68,9 @@ afterEach(() => {
   // check content
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
-});*/
+});
 
-test('200 code, default path', async () => {
+test('200 code, default path to save', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
   expect(receivedHTMLPathObj.filepath)
@@ -78,9 +78,12 @@ test('200 code, default path', async () => {
   // check content
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
+  // delete data after test
+  await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true });
+  await fs.rm(receivedHTMLPathObj.filepath);
 });
 
-/*test('200 code, check content', async () => {
+test('200 code, check content, existed user path to save', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   const $received = cheerio.load(receivedHTML);
@@ -100,4 +103,4 @@ test('200 code, default path', async () => {
     });
   });
   expect(receivedSRCs).toEqual(expectedSRCs);
-});*/
+});

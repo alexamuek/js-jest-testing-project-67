@@ -21,8 +21,9 @@ beforeAll(async () => {
   initData.sourceHTML = await fs.readFile(getFixturePath(initData.sourceHTMLFile), { encoding: 'utf8' });
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' });
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' });
-  initData.defaultPath = './'; //path.join(process.cwd(), 'src');
+  initData.defaultPath = './'; // path.join(process.cwd(), 'src');
   initData.outputFilename = 'ru-hexlet-io-courses.html';
+  initData.outputContentFolder = 'ru-hexlet-io-courses_files';
 });
 
 beforeEach(async () => {
@@ -48,7 +49,7 @@ afterAll(() => {
   nock.restore();
 });
 
-/*test('400 code, HTML loading', async () => {
+test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock(/ru\.hexlet\.io/)
     .get(/\/courses/)
@@ -72,7 +73,10 @@ test('200 code, non-existed user folder', async () => {
     .toThrow(new Error('Non-existed folder!'));
 });
 
-test('400 code, Content loading', async () => {
+test('400 code, Content loading, default user path', async () => {
+  nock(/ru\.hexlet\.io/)
+    .get(/\/courses/)
+    .reply(200, initData.sourceHTML);
   nock(/ru\.hexlet\.io/)
     .get(/\/professions/)
     .reply(400, {
@@ -83,7 +87,10 @@ test('400 code, Content loading', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   expect(receivedHTMLPathObj.filepath)
     .toEqual(path.join(initData.defaultPath, initData.outputFilename));
-});*/
+  // delete files and folder
+  await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true });
+  await fs.rm(receivedHTMLPathObj.filepath);
+});
 
 test('no connection', async () => {
   nock.cleanAll();
