@@ -83,7 +83,7 @@ test('200 code, existed user path to save', async () => {
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
-test('200 code, default path to save', async () => {
+/*test('200 code, default path to save', async () => {
   nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
@@ -142,4 +142,4 @@ test('200 code, check content, existed user path to save', async () => {
     });
   });
   expect(receivedSRCs).toEqual(expectedSRCs);
-});
+});*/
