@@ -6,7 +6,7 @@ import { getHTML } from './getPageData.js';
 import { createFile, isExistedFolder, createFolderIfNecessary } from './handleFilesTasks.js';
 import downloadContent from './downloadContent.js';
 
- const defaultPath =path.join(process.cwd(), 'src');
+ const defaultPath = './'; // path.join(process.cwd(), 'src');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
   console.log('outputPath in loadHTML = ', outputPath);
