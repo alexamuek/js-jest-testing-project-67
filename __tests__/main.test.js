@@ -59,8 +59,8 @@ test('200 code, existed user path to save', async () => {
   nock.cleanAll();
   nock.disableNetConnect();
   nock(/ru\.hexlet\.io:443/)
-    .persist()
     .get(/\/courses/)
+    .times(2)
     .reply(200, initData.sourceHTML);
   nock(/ru\.hexlet\.io:443/)
     .get(/\/professions/)
