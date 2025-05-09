@@ -58,11 +58,11 @@ afterEach(() => {
 test('200 code, existed user path to save', async () => {
   //nock.cleanAll();
   nock.disableNetConnect();
-  nock(/ru\.hexlet\.io:443/)
+  nock('https://ru.hexlet.io/')
     .get(/\/courses/)
     .times(2)
     .reply(200, initData.sourceHTML);
-  console.log(nock.activeMocks());
+  console.log('here!!!', nock.activeMocks());
   /*nock(/ru\.hexlet\.io:443/)
     .get(/\/professions/)
     .reply(200, initData.expectedImage);
