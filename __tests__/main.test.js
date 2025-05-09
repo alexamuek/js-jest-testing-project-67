@@ -5,7 +5,6 @@ import fs from 'fs/promises';
 import os from 'node:os';
 import _ from 'lodash';
 import * as cheerio from 'cheerio';
-import axios from 'axios';
 import loadHTML from '../src/index.js';
 import { contentType, refTag } from '../src/downloadContent.js';
 
@@ -35,20 +34,20 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
-  // nock.disableNetConnect();
-  /*nock(/ru\.hexlet\.io/)
+  nock.disableNetConnect();
+  nock('https://ru.hexlet.io')
     .persist()
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io')
     .get(/\/professions/)
     .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io')
     .get(/\/assets\/application.css/)
     .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io')
     .get(/\/packs/)
-    .reply(200, initData.expectedScript);*/
+    .reply(200, initData.expectedScript);
 });
 
 afterEach(() => {
@@ -56,27 +55,7 @@ afterEach(() => {
 });
 
 test('200 code, existed user path to save', async () => {
-  //nock.cleanAll();
-  nock.disableNetConnect();
-  const mock = nock('https://ru.hexlet.io')
-    .get('/courses/')
-    //.times(2)
-    .reply(200, initData.sourceHTML);
-  console.log('here!!!', nock.activeMocks());
-  /*nock(/ru\.hexlet\.io:443/)
-    .get(/\/professions/)
-    .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io:443/)
-    .get(/\/assets\/application.css/)
-    .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io:443/)
-    .get(/\/packs/)
-    .reply(200, initData.expectedScript);*/
-  //const response = await axios.get('https://ru.hexlet.io/courses/');
-  //expect(mock.isDone()).toBe(true);
-  //console.log(response.data);
-  expect(1).toEqual(1);
-  /*const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
+  const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   // check outputPath
   expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename));
   const isContentFolderExists = await fs.access(
@@ -88,23 +67,10 @@ test('200 code, existed user path to save', async () => {
   expect(isContentFolderExists).toBeUndefined();
   // check content
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
-  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));*/
+  expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
-/*test('200 code, default path to save', async () => {
-  nock(/ru\.hexlet\.io/)
-    .persist()
-    .get(/\/courses/)
-    .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/professions/)
-    .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/assets\/application.css/)
-    .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/packs/)
-    .reply(200, initData.expectedScript);
+test('200 code, default path to save', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
   expect(receivedHTMLPathObj.filepath)
@@ -118,19 +84,6 @@ test('200 code, existed user path to save', async () => {
 });
 
 test('200 code, check content, existed user path to save', async () => {
-  nock(/ru\.hexlet\.io/)
-    .persist()
-    .get(/\/courses/)
-    .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/professions/)
-    .reply(200, initData.expectedImage);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/assets\/application.css/)
-    .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io/)
-    .get(/\/packs/)
-    .reply(200, initData.expectedScript);
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   const $received = cheerio.load(receivedHTML);
@@ -150,4 +103,4 @@ test('200 code, check content, existed user path to save', async () => {
     });
   });
   expect(receivedSRCs).toEqual(expectedSRCs);
-});*/
+});
