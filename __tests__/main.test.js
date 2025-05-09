@@ -55,6 +55,19 @@ afterEach(() => {
 });
 
 test('200 code, existed user path to save', async () => {
+  nock(/ru\.hexlet\.io/)
+    .persist()
+    .get(/\/courses/)
+    .reply(200, initData.sourceHTML);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/professions/)
+    .reply(200, initData.expectedImage);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/assets\/application.css/)
+    .reply(200, initData.expectedCSS);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/packs/)
+    .reply(200, initData.expectedScript);
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   // check outputPath
   expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename));
@@ -71,6 +84,19 @@ test('200 code, existed user path to save', async () => {
 });
 
 test('200 code, default path to save', async () => {
+  nock(/ru\.hexlet\.io/)
+    .persist()
+    .get(/\/courses/)
+    .reply(200, initData.sourceHTML);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/professions/)
+    .reply(200, initData.expectedImage);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/assets\/application.css/)
+    .reply(200, initData.expectedCSS);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/packs/)
+    .reply(200, initData.expectedScript);
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
   expect(receivedHTMLPathObj.filepath)
@@ -84,6 +110,19 @@ test('200 code, default path to save', async () => {
 });
 
 test('200 code, check content, existed user path to save', async () => {
+  nock(/ru\.hexlet\.io/)
+    .persist()
+    .get(/\/courses/)
+    .reply(200, initData.sourceHTML);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/professions/)
+    .reply(200, initData.expectedImage);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/assets\/application.css/)
+    .reply(200, initData.expectedCSS);
+  nock(/ru\.hexlet\.io/)
+    .get(/\/packs/)
+    .reply(200, initData.expectedScript);
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   const $received = cheerio.load(receivedHTML);
