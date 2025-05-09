@@ -56,13 +56,14 @@ afterEach(() => {
 });
 
 test('200 code, existed user path to save', async () => {
-  nock.cleanAll();
+  //nock.cleanAll();
   nock.disableNetConnect();
   nock(/ru\.hexlet\.io:443/)
     .get(/\/courses/)
     .times(2)
     .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io:443/)
+  console.log(nock.activeMocks());
+  /*nock(/ru\.hexlet\.io:443/)
     .get(/\/professions/)
     .reply(200, initData.expectedImage);
   nock(/ru\.hexlet\.io:443/)
@@ -70,7 +71,7 @@ test('200 code, existed user path to save', async () => {
     .reply(200, initData.expectedCSS);
   nock(/ru\.hexlet\.io:443/)
     .get(/\/packs/)
-    .reply(200, initData.expectedScript);
+    .reply(200, initData.expectedScript);*/
   const response = await axios.get(initData.hexletUrl);
   console.log(response.data);
   expect(1).toEqual(1);
