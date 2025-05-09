@@ -36,7 +36,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
   // nock.disableNetConnect();
-  nock(/ru\.hexlet\.io/)
+  /*nock(/ru\.hexlet\.io/)
     .persist()
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
@@ -48,7 +48,7 @@ beforeEach(async () => {
     .reply(200, initData.expectedCSS);
   nock(/ru\.hexlet\.io/)
     .get(/\/packs/)
-    .reply(200, initData.expectedScript);
+    .reply(200, initData.expectedScript);*/
 });
 
 afterEach(() => {
