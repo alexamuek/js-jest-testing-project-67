@@ -5,6 +5,7 @@ require('axios-debug-log');
 const axios = require('axios');
 
 const getHTML = async (url) => {
+  console.log('url in getHTML: ', url);
   try {
     const response = await axios.get(url);
     return response.data;
