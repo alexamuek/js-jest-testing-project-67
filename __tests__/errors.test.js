@@ -29,15 +29,15 @@ beforeAll(async () => {
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
   nock.disableNetConnect();
-  nock('https://ru.hexlet.io/')
+  nock('https://ru.hexlet.io')
     .persist()
     .get('/courses')
     .reply(200, initData.sourceHTML);
-  nock('https://ru.hexlet.io/')
-    .get(/\/assets\/application.css/)
+  nock('https://ru.hexlet.io')
+    .get('/assets/application.css')
     .reply(200, initData.expectedCSS);
-  nock('https://ru.hexlet.io/')
-    .get(/\/packs/)
+  nock('https://ru.hexlet.io')
+    .get('/packs/js/runtime.js')
     .reply(200, initData.expectedScript);
 });
 
@@ -49,7 +49,7 @@ afterAll(() => {
   nock.restore();
 });
 
-/*test('400 code, HTML loading', async () => {
+/* test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock('https://ru.hexlet.io/')
     .get(/\/courses/)
@@ -63,7 +63,7 @@ afterAll(() => {
   )
     .rejects
     .toThrow(new Error('HTML loading error!'));
-});
+}); */
 
 test('200 code, non-existed user folder', async () => {
   await expect(
@@ -73,7 +73,7 @@ test('200 code, non-existed user folder', async () => {
     .toThrow(new Error('Non-existed folder!'));
 });
 
-test('400 code, Content loading, default user path', async () => {
+/* test('400 code, Content loading, default user path', async () => {
   nock('https://ru.hexlet.io/')
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
@@ -90,7 +90,7 @@ test('400 code, Content loading, default user path', async () => {
   // delete files and folder
   await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true });
   await fs.rm(receivedHTMLPathObj.filepath);
-});*/
+}); */
 
 test('no connection', async () => {
   nock.cleanAll();
