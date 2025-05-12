@@ -29,14 +29,14 @@ beforeAll(async () => {
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
   nock.disableNetConnect();
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .persist()
-    .get(/\/courses/)
+    .get('/courses')
     .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .get(/\/assets\/application.css/)
     .reply(200, initData.expectedCSS);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .get(/\/packs/)
     .reply(200, initData.expectedScript);
 });
@@ -51,7 +51,7 @@ afterAll(() => {
 
 test('400 code, HTML loading', async () => {
   nock.cleanAll();
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .get(/\/courses/)
     .reply(400, {
       error: {
@@ -74,10 +74,10 @@ test('200 code, non-existed user folder', async () => {
 });
 
 test('400 code, Content loading, default user path', async () => {
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .get(/\/courses/)
     .reply(200, initData.sourceHTML);
-  nock(/ru\.hexlet\.io/)
+  nock('https://ru.hexlet.io/')
     .get(/\/professions/)
     .reply(400, {
       error: {
