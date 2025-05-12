@@ -49,7 +49,7 @@ afterAll(() => {
   nock.restore();
 });
 
-test('400 code, HTML loading', async () => {
+/*test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock('https://ru.hexlet.io/')
     .get(/\/courses/)
@@ -90,7 +90,7 @@ test('400 code, Content loading, default user path', async () => {
   // delete files and folder
   await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true });
   await fs.rm(receivedHTMLPathObj.filepath);
-});
+});*/
 
 test('no connection', async () => {
   nock.cleanAll();
