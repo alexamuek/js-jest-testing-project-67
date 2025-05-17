@@ -34,13 +34,8 @@ afterEach(() => {
   nock.cleanAll()
 })
 
-afterAll(() => {
-  nock.restore()
-})
-
 test('400 code, HTML loading', async () => {
   nock.cleanAll();
-
   const scope = nock('https://ru.hexlet.io')
     .get('/courses')
     .reply(400, {
@@ -48,6 +43,7 @@ test('400 code, HTML loading', async () => {
         message: 'Bad request',
       },
     })
+  console.log(nock.activeMocks());
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
@@ -56,6 +52,8 @@ test('400 code, HTML loading', async () => {
 });
 
 test('200 code, non-existed user folder', async () => {
+  nock.cleanAll();
+  console.log(nock.activeMocks());
   await expect(
     loadHTML(initData.hexletUrl, '/1/1'),
   )
@@ -85,6 +83,7 @@ test('200 code, non-existed user folder', async () => {
 test('no connection', async () => {
   nock.cleanAll()
   nock.disableNetConnect();
+  console.log(nock.activeMocks());
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
