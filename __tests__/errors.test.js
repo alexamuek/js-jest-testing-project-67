@@ -49,7 +49,7 @@ afterAll(() => {
   nock.restore()
 })
 
-/* test('400 code, HTML loading', async () => {
+test('400 code, HTML loading', async () => {
   nock.cleanAll();
   nock('https://ru.hexlet.io/')
     .get(/\/courses/)
@@ -63,7 +63,7 @@ afterAll(() => {
   )
     .rejects
     .toThrow(new Error('HTML loading error!'));
-}); */
+});
 
 test('200 code, non-existed user folder', async () => {
   await expect(
