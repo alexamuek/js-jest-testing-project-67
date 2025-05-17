@@ -52,6 +52,7 @@ afterEach(() => {
 });
 
 test('200 code, existed user path to save', async () => {
+  console.log('Активные моки:', nock.activeMocks());
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   // check outputPath
   expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename));
@@ -68,6 +69,7 @@ test('200 code, existed user path to save', async () => {
 });
 
 test('200 code, default path to save', async () => {
+  console.log('Активные моки:', nock.activeMocks());
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
   expect(receivedHTMLPathObj.filepath)
@@ -81,6 +83,7 @@ test('200 code, default path to save', async () => {
 });
 
 test('200 code, check content, existed user path to save', async () => {
+  console.log('Активные моки:', nock.activeMocks());
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath);
   const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' });
   const $received = cheerio.load(receivedHTML);
