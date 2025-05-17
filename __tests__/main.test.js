@@ -44,7 +44,7 @@ beforeEach(async () => {
     .reply(200, initData.expectedCSS)
     .get('/packs/js/runtime.js')
     .reply(200, initData.expectedScript)
-  console.log('Активные моки:', scope);
+  // console.log('Активные моки:', scope);
 });
 
 afterEach(() => {
