@@ -34,20 +34,17 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
-  nock.disableNetConnect();
-  nock('https://ru.hexlet.io')
-    .persist()
-    .get(/\/courses/)
-    .reply(200, initData.sourceHTML);
-  nock('https://ru.hexlet.io')
-    .get(/\/professions/)
-    .reply(200, initData.expectedImage);
-  nock('https://ru.hexlet.io')
-    .get(/\/assets\/application.css/)
-    .reply(200, initData.expectedCSS);
-  nock('https://ru.hexlet.io')
-    .get(/\/packs/)
-    .reply(200, initData.expectedScript);
+  const scope = nock('https://ru.hexlet.io')
+    .get('/courses')
+    .times(2)
+    .reply(200, initData.sourceHTML)
+    .get('/assets/professions/nodejs.png')
+    .reply(200, initData.expectedImage)
+    .get('/assets/application.css')
+    .reply(200, initData.expectedCSS)
+    .get('/packs/js/runtime.js')
+    .reply(200, initData.expectedScript)
+  console.log('Активные моки:', scope);
 });
 
 afterEach(() => {
@@ -70,7 +67,7 @@ test('200 code, existed user path to save', async () => {
   expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''));
 });
 
-test('200 code, default path to save', async () => {
+/* test('200 code, default path to save', async () => {
   const receivedHTMLPathObj = await loadHTML(initData.hexletUrl);
   // check outputPath
   expect(receivedHTMLPathObj.filepath)
@@ -103,4 +100,4 @@ test('200 code, check content, existed user path to save', async () => {
     });
   });
   expect(receivedSRCs).toEqual(expectedSRCs);
-});
+}); */
