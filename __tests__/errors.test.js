@@ -28,17 +28,6 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
-  nock.disableNetConnect()
-  nock('https://ru.hexlet.io')
-    .persist()
-    .get('/courses')
-    .reply(200, initData.sourceHTML)
-  nock('https://ru.hexlet.io')
-    .get('/assets/application.css')
-    .reply(200, initData.expectedCSS)
-  nock('https://ru.hexlet.io')
-    .get('/packs/js/runtime.js')
-    .reply(200, initData.expectedScript)
 })
 
 afterEach(() => {
@@ -51,18 +40,19 @@ afterAll(() => {
 
 test('400 code, HTML loading', async () => {
   nock.cleanAll();
-  nock('https://ru.hexlet.io/')
-    .get(/\/courses/)
+
+  const scope = nock('https://ru.hexlet.io')
+    .get('/courses')
     .reply(400, {
       error: {
         message: 'Bad request',
       },
-    });
+    })
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
     .rejects
-    .toThrow(new Error('HTML loading error!'));
+    .toThrow(new Error('HTML loading error!'))
 });
 
 test('200 code, non-existed user folder', async () => {
@@ -94,6 +84,7 @@ test('200 code, non-existed user folder', async () => {
 
 test('no connection', async () => {
   nock.cleanAll()
+  nock.disableNetConnect();
   await expect(
     loadHTML(initData.hexletUrl, userFolderPath),
   )
