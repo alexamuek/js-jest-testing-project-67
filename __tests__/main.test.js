@@ -46,7 +46,7 @@ describe('positive', () => {
     // userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
     nock('https://ru.hexlet.io')
       .get('/courses')
-      //.times(2)
+      // .times(2)
       .reply(200, initData.sourceHTML)
       .persist()
       .get('/assets/professions/nodejs.png')
