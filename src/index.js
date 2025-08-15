@@ -9,7 +9,7 @@ const defaultPath = './' // path.join(process.cwd(), 'src');
 
 const loadHTML = async (url, outputPath = defaultPath) => {
   // console.log('outputPath in loadHTML = ', outputPath);
-  console.log('input user url: ', url)
+  // console.log('input user url: ', url)
   if (outputPath !== defaultPath) {
     await isExistedFolder(outputPath)
   }
