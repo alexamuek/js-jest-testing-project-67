@@ -44,6 +44,24 @@ afterEach(() => {
 describe('positive', () => {
   beforeEach(async () => {
     // userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
+    /* nock('https://ru.hexlet.io:443')
+      .get('/courses')
+      // .times(2)
+      .reply(200, initData.sourceHTML)
+      .persist()
+      .get('/assets/professions/nodejs.png')
+      .reply(200, initData.expectedImage)
+      .get('/assets/application.css')
+      .reply(200, initData.expectedCSS)
+      .get('/packs/js/runtime.js')
+      .reply(200, initData.expectedScript) */
+  })
+
+  /* afterEach(() => {
+    nock.cleanAll()
+  }) */
+
+  test('200 code, existed user path to save', async () => {
     nock('https://ru.hexlet.io:443')
       .get('/courses')
       // .times(2)
@@ -55,13 +73,6 @@ describe('positive', () => {
       .reply(200, initData.expectedCSS)
       .get('/packs/js/runtime.js')
       .reply(200, initData.expectedScript)
-  })
-
-  /* afterEach(() => {
-    nock.cleanAll()
-  }) */
-
-  test('200 code, existed user path to save', async () => {
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath)
     // check outputPath
     expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename))
