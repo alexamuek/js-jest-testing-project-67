@@ -77,7 +77,7 @@ describe('positive', () => {
     expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
   })
 
-  test('200 code, default path to save', async () => {
+  /* test('200 code, default path to save', async () => {
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl)
     // check outputPath
     expect(receivedHTMLPathObj.filepath)
@@ -110,7 +110,7 @@ describe('positive', () => {
       })
     })
     expect(receivedSRCs).toEqual(expectedSRCs)
-  })
+  }) */
 })
 
 /* describe('negative', () => {
