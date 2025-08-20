@@ -4,9 +4,9 @@ import path, { dirname } from 'path'
 import fs from 'fs/promises'
 import os from 'node:os'
 import _ from 'lodash'
-import * as cheerio from 'cheerio'
+// import * as cheerio from 'cheerio'
 import loadHTML from '../src/index.js'
-import { contentType, refTag } from '../src/downloadContent.js'
+// import { contentType, refTag } from '../src/downloadContent.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
