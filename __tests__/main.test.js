@@ -44,7 +44,7 @@ afterEach(() => {
 describe('positive', () => {
   beforeEach(async () => {
     // userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
-    nock('https://ru.hexlet.io')
+    nock('https://ru.hexlet.io:443')
       .get('/courses')
       // .times(2)
       .reply(200, initData.sourceHTML)
@@ -115,7 +115,7 @@ describe('positive', () => {
 
 describe('negative', () => {
   test('400 code, HTML loading', async () => {
-    nock('https://ru.hexlet.io')
+    nock('https://ru.hexlet.io:443')
       .get('/courses')
       .reply(400, {
         error: {
@@ -139,18 +139,13 @@ describe('negative', () => {
   })
 
   test('400 code, Content loading, default user path', async () => {
-    nock('https://ru.hexlet.io/')
-      .get('/courses') // Заглушаем успешную загрузку HTML
+    nock('https://ru.hexlet.io:443')
+      .get('/courses')
       .reply(200, initData.sourceHTML)
-
-      // Заглушаем успешные загрузки CSS и JS
       .get('/assets/application.css')
       .reply(200, initData.expectedCSS)
-
       .get('/packs/js/runtime.js')
       .reply(200, initData.expectedScript)
-
-      // А вот изображение — пусть падает
       .get('/assets/professions/nodejs.png')
       .reply(400, { error: { message: 'Bad request' } })
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl)
