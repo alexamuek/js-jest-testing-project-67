@@ -1,78 +1,3 @@
-/* import { fileURLToPath } from 'url'
-import nock from 'nock'
-import path, { dirname } from 'path'
-import fs from 'fs/promises'
-import os from 'node:os'
-import _ from 'lodash'
-import loadHTML from '../src/index.js'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const getFixturePath = filename => path.join(__dirname, '..', '__fixtures__', filename)
-
-const initData = {}
-let userFolderPath
-
-beforeAll(async () => {
-  initData.sourceHTMLFile = 'sourceHTML.html'
-  initData.expectedHTMLFile = 'expected.html'
-  initData.imageFile = 'nodejs.png'
-  initData.css = 'application.css'
-  initData.script = 'runtime.js'
-  initData.hexletUrl = 'https://ru.hexlet.io/courses'
-  initData.outputFilename = 'ru-hexlet-io-courses.html'
-  initData.outputContentFolder = 'ru-hexlet-io-courses_files'
-
-  initData.sourceHTML = await fs.readFile(getFixturePath(initData.sourceHTMLFile), 'utf8')
-  initData.expectedHTML = await fs.readFile(getFixturePath(initData.expectedHTMLFile), 'utf8')
-  initData.expectedImage = await fs.readFile(getFixturePath(initData.imageFile))
-  initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), 'utf8')
-  initData.expectedScript = await fs.readFile(getFixturePath(initData.script), 'utf8')
-
-  nock.disableNetConnect()
-})
-
-beforeEach(async () => {
-  userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
-})
-
-afterEach(() => {
-  nock.cleanAll()
-})
-
-describe('positive', () => {
-  test('200 code, existing user path to save', async () => {
-    nock('https://ru.hexlet.io:443')
-      .get('/courses')
-      .reply(200, initData.sourceHTML)
-      .persist()
-      .get('/assets/professions/nodejs.png')
-      .reply(200, initData.expectedImage)
-      .get('/assets/application.css')
-      .reply(200, initData.expectedCSS)
-      .get('/packs/js/runtime.js')
-      .reply(200, initData.expectedScript)
-
-    const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath)
-
-    expect(receivedHTMLPathObj.filepath)
-      .toEqual(path.join(userFolderPath, initData.outputFilename))
-
-    const isContentFolderExists = await fs.access(
-      path.join(
-        userFolderPath,
-        initData.outputContentFolder,
-      ),
-    )
-    expect(isContentFolderExists).toBeUndefined()
-
-    const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, 'utf8')
-    expect(_.replace(initData.expectedHTML, /\s/g, ''))
-      .toEqual(_.replace(receivedHTML, /\s/g, ''))
-  })
-}) */
-
 import { fileURLToPath } from 'url'
 import nock from 'nock'
 import path, { dirname } from 'path'
@@ -121,7 +46,6 @@ describe('positive', () => {
     // userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
     nock('https://ru.hexlet.io:443')
       .get('/courses')
-      // .times(2)
       .reply(200, initData.sourceHTML)
       .persist()
       .get('/assets/professions/nodejs.png')
