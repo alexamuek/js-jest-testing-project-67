@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url'
+/* import { fileURLToPath } from 'url'
 import nock from 'nock'
 import path, { dirname } from 'path'
 import fs from 'fs/promises'
@@ -71,9 +71,9 @@ describe('positive', () => {
     expect(_.replace(initData.expectedHTML, /\s/g, ''))
       .toEqual(_.replace(receivedHTML, /\s/g, ''))
   })
-})
+}) */
 
-/* import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'url'
 import nock from 'nock'
 import path, { dirname } from 'path'
 import fs from 'fs/promises'
@@ -186,9 +186,9 @@ describe('positive', () => {
     })
     expect(receivedSRCs).toEqual(expectedSRCs)
   })
-}) */
+})
 
-/* describe('negative', () => {
+describe('negative', () => {
   test('400 code, HTML loading', async () => {
     nock('https://ru.hexlet.io:443')
       .get('/courses')
@@ -238,4 +238,4 @@ describe('positive', () => {
       .rejects
       .toThrow(new Error('HTML loading error!'))
   })
-}) */
+})
