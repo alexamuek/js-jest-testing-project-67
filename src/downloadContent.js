@@ -16,9 +16,9 @@ const refTag = {
 const logLoader = debug('page-loader')
 
 const generateLocalSrcLink = (contentUrl, contentFolder) => {
-  const extIndex = contentUrl.pathname.indexOf('.')
-  const extention = extIndex === -1 ? 'html' : contentUrl.pathname.substring(extIndex + 1)
-  const URLWithoutExt = extIndex === -1 ? contentUrl.href : contentUrl.href.substring(0, contentUrl.href.lastIndexOf('.'))
+  const extentionOrNull = path.extname(contentUrl.pathname).replace('.','')
+  const extention = !extentionOrNull ? 'html' : extentionOrNull
+  const URLWithoutExt = extention === 'html' ? contentUrl.href : contentUrl.href.substring(0, contentUrl.href.lastIndexOf('.'))
   const withoutHTTP = URLWithoutExt.substring(URLWithoutExt.indexOf('//') + 2)
   const fileName = `${_.replace(withoutHTTP, /[^0-9a-zA-Z]/g, '-')}.${extention}`
   return [`${contentFolder}/${fileName}`, fileName]
@@ -40,13 +40,18 @@ const getHTTPSrcLink = (src, targetURLobj) => {
 
 const resolveAndSave = async (filePath, url, $tag, srcName, newLink) => {
   const content = await getContent(url)
-  if (!content) {
+  if (content) {
+    $tag.attr(srcName, newLink)
+    await createFile(filePath, content)
+  }
+  return
+  /*if (!content) {
     console.log(`Content is empty! content url = ${url}`)
   }
   else {
     $tag.attr(srcName, newLink)
     await createFile(filePath, content)
-  }
+  }*/
 }
 
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
