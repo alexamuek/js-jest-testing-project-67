@@ -1,8 +1,8 @@
 import { createRequire } from 'module'
+import axios from 'axios'
 
 const require = createRequire(import.meta.url)
 require('axios-debug-log')
-const axios = require('axios')
 
 const getHTML = async (url) => {
   try {

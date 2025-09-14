@@ -29,7 +29,7 @@ beforeAll(async () => {
   initData.expectedImage = await fs.readFile(getFixturePath(initData.imageFile), { encoding: 'utf8' })
   initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' })
   initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' })
-  initData.defaultPath = './' // path.join(process.cwd(), 'src')
+  initData.defaultPath = './'
   nock.disableNetConnect()
 })
 
@@ -43,7 +43,6 @@ afterEach(() => {
 
 describe('positive', () => {
   beforeEach(async () => {
-    // userFolderPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'))
     nock('https://ru.hexlet.io:443')
       .get('/courses')
       .reply(200, initData.sourceHTML)
@@ -62,7 +61,6 @@ describe('positive', () => {
 
   test('200 code, existed user path to save', async () => {
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath)
-    // check outputPath
     expect(receivedHTMLPathObj.filepath).toEqual(path.join(userFolderPath, initData.outputFilename))
     const isContentFolderExists = await fs.access(
       path.join(
@@ -71,7 +69,6 @@ describe('positive', () => {
       ),
     )
     expect(isContentFolderExists).toBeUndefined()
-    // check content
     const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' })
     expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
   })
@@ -150,7 +147,6 @@ describe('negative', () => {
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl)
     expect(receivedHTMLPathObj.filepath)
       .toEqual(path.join(initData.defaultPath, initData.outputFilename))
-    // delete files and folder
     await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true })
     await fs.rm(receivedHTMLPathObj.filepath)
   })
