@@ -29,8 +29,7 @@ const getContent = async (contentUrl) => {
   catch (error) {
     console.error(error)
     console.error(`Content for ${contentUrl} could not be loaded`)
-    return null
-    // throw new Error('Content loading error!');
+    throw new Error('Content loading error!');
   }
 }
 
