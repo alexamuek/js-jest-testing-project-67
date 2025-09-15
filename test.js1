@@ -1,8 +1,0 @@
-const contentUrl = 'https://cdn2.site.com/blog/assets/style.css';
-const htmlURL = 'https://site.com/blog/about';
-const target = new URL(htmlURL);
-const content = new URL(contentUrl);
-
-console.log(target);
-console.log(content);
-console.log(contentUrl.includes(target.origin));
