@@ -48,4 +48,3 @@ const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
 }
 
 export default downloadContent
-export { contentType, refTag }
