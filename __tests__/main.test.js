@@ -6,10 +6,16 @@ import os from 'node:os'
 import _ from 'lodash'
 import * as cheerio from 'cheerio'
 import loadHTML from '../src/index.js'
-import { contentType, refTag } from '../src/downloadContent.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const contentType = ['img', 'link', 'script']
+
+const refTag = {
+  img: 'src',
+  link: 'href',
+  script: 'src',
+}
 
 const getFixturePath = filename => path.join(__dirname, '..', '__fixtures__', filename)
 const initData = {}
@@ -118,7 +124,6 @@ describe('negative', () => {
           message: 'Bad request',
         },
       })
-    console.log(nock.activeMocks())
     await expect(
       loadHTML(initData.hexletUrl, userFolderPath),
     )
@@ -126,12 +131,40 @@ describe('negative', () => {
       .toThrow(new Error('HTML loading error!'))
   })
 
-  test('200 code, non-existed user folder', async () => {
+  test('non-existed user folder', async () => {
     await expect(
       loadHTML(initData.hexletUrl, '/1/1'),
     )
       .rejects
-      .toThrow(new Error('Non-existed folder!'))
+      .toThrow(/ENOENT/)
+  })
+
+  test('wrong path - file instead of directory', async () => {
+    const directory = path.join(__dirname, '..', '__fixtures__', 'expected.html')
+    await expect(
+      loadHTML(initData.hexletUrl, directory),
+    )
+      .rejects
+      .toThrow(/ENOTDIR/)
+  })
+
+  test('wrong path - access denied to dir', async () => {
+    nock('https://ru.hexlet.io:443')
+      .get('/courses')
+      .reply(200, initData.sourceHTML)
+      .persist()
+      .get('/assets/professions/nodejs.png')
+      .reply(200, initData.expectedImage)
+      .get('/assets/application.css')
+      .reply(200, initData.expectedCSS)
+      .get('/packs/js/runtime.js')
+      .reply(200, initData.expectedScript)
+    const directory = '/sys'
+    await expect(
+      loadHTML(initData.hexletUrl, directory),
+    )
+      .rejects
+      .toThrow(/EACCES/)
   })
 
   test('400 code, Content loading, default user path', async () => {
@@ -152,6 +185,36 @@ describe('negative', () => {
   })
 
   test('no connection', async () => {
+    await expect(
+      loadHTML(initData.hexletUrl, userFolderPath),
+    )
+      .rejects
+      .toThrow(new Error('HTML loading error!'))
+  })
+
+  test('404 code, HTML loading', async () => {
+    nock('https://ru.hexlet.io:443')
+      .get('/courses')
+      .reply(404, {
+        error: {
+          message: 'Not Found',
+        },
+      })
+    await expect(
+      loadHTML(initData.hexletUrl, userFolderPath),
+    )
+      .rejects
+      .toThrow(new Error('HTML loading error!'))
+  })
+
+  test('500 code, HTML loading', async () => {
+    nock('https://ru.hexlet.io:443')
+      .get('/courses')
+      .reply(500, {
+        error: {
+          message: 'Internal Server Error',
+        },
+      })
     await expect(
       loadHTML(initData.hexletUrl, userFolderPath),
     )

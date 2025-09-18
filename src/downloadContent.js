@@ -27,7 +27,8 @@ const downloadAndUpdateHTML = async (filePath, url, $tag, srcName, newLink) => {
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
   const $ = cheerio.load(html)
   const targetURLobj = new URL(targetURL)
-  const arrayOfNodes = $('img, link, script').toArray()
+  const tags = contentType.join(', ')
+  const arrayOfNodes = $(tags).toArray()
   const promises = arrayOfNodes.map(async (element) => {
     const $tag = $(element)
     const src = $tag.attr(refTag[element.tagName])

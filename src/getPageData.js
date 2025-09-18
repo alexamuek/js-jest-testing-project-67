@@ -10,8 +10,7 @@ const getHTML = async (url) => {
     const response = await axios.get(url)
     return response.data
   }
-  catch (error) {
-    console.error(error)
+  catch {
     console.error(`HTML page for ${url} could not be loaded`)
     throw new Error('HTML loading error!')
   }
@@ -27,8 +26,7 @@ const getContent = async (contentUrl) => {
     const fileData = Buffer.from(response.data, 'binary')
     return fileData
   }
-  catch (error) {
-    console.error(error)
+  catch {
     console.error(`Content for ${contentUrl} could not be loaded`)
     throw new Error('Content loading error!')
   }
