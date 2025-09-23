@@ -19,24 +19,25 @@ const refTag = {
 
 const getFixturePath = filename => path.join(__dirname, '..', '__fixtures__', filename)
 const initData = {}
+const resources = {
+  sourceHTML: 'sourceHTML.html',
+  expectedHTML: 'expected.html',
+  image: 'nodejs.png',
+  css: 'application.css',
+  script: 'runtime.js'
+}
+const loadedResources = {}
 let userFolderPath
 
 beforeAll(async () => {
-  initData.sourceHTMLFile = 'sourceHTML.html'
-  initData.expectedHTMLFile = 'expected.html'
-  initData.imageFile = 'nodejs.png'
-  initData.css = 'application.css'
-  initData.script = 'runtime.js'
   initData.hexletUrl = 'https://ru.hexlet.io/courses'
   initData.outputFilename = 'ru-hexlet-io-courses.html'
   initData.outputContentFolder = 'ru-hexlet-io-courses_files'
-  initData.sourceHTML = await fs.readFile(getFixturePath(initData.sourceHTMLFile), { encoding: 'utf8' })
-  initData.expectedHTML = await fs.readFile(getFixturePath(initData.expectedHTMLFile), { encoding: 'utf8' })
-  initData.expectedImage = await fs.readFile(getFixturePath(initData.imageFile), { encoding: 'utf8' })
-  initData.expectedCSS = await fs.readFile(getFixturePath(initData.css), { encoding: 'utf8' })
-  initData.expectedScript = await fs.readFile(getFixturePath(initData.script), { encoding: 'utf8' })
   initData.defaultPath = './'
   nock.disableNetConnect()
+  for (const key in resources) {
+    loadedResources[key] = await fs.readFile(getFixturePath(resources[key]), { encoding: 'utf8' })
+  }
 })
 
 beforeEach(async () => {
@@ -51,14 +52,14 @@ describe('positive', () => {
   beforeEach(async () => {
     nock('https://ru.hexlet.io:443')
       .get('/courses')
-      .reply(200, initData.sourceHTML)
+      .reply(200, loadedResources.sourceHTML)
       .persist()
       .get('/assets/professions/nodejs.png')
-      .reply(200, initData.expectedImage)
+      .reply(200, loadedResources.image)
       .get('/assets/application.css')
-      .reply(200, initData.expectedCSS)
+      .reply(200, loadedResources.css)
       .get('/packs/js/runtime.js')
-      .reply(200, initData.expectedScript)
+      .reply(200, loadedResources.script)
   })
 
   afterEach(() => {
@@ -76,7 +77,7 @@ describe('positive', () => {
     )
     expect(isContentFolderExists).toBeUndefined()
     const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' })
-    expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
+    expect(_.replace(loadedResources.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
   })
 
   test('200 code, default path to save', async () => {
@@ -86,7 +87,7 @@ describe('positive', () => {
       .toEqual(path.join(initData.defaultPath, initData.outputFilename))
     // check content
     const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' })
-    expect(_.replace(initData.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
+    expect(_.replace(loadedResources.expectedHTML, /[\s]/g, '')).toEqual(_.replace(receivedHTML, /[\s]/g, ''))
     // delete data after test
     await fs.rm(path.join(initData.defaultPath, initData.outputContentFolder), { recursive: true })
     await fs.rm(receivedHTMLPathObj.filepath)
@@ -96,7 +97,7 @@ describe('positive', () => {
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl, userFolderPath)
     const receivedHTML = await fs.readFile(receivedHTMLPathObj.filepath, { encoding: 'utf8' })
     const $received = cheerio.load(receivedHTML)
-    const $expected = cheerio.load(initData.expectedHTML)
+    const $expected = cheerio.load(loadedResources.expectedHTML)
     const receivedSRCs = []
     const expectedSRCs = []
     contentType.forEach((tag) => {
@@ -151,14 +152,14 @@ describe('negative', () => {
   test('wrong path - access denied to dir', async () => {
     nock('https://ru.hexlet.io:443')
       .get('/courses')
-      .reply(200, initData.sourceHTML)
+      .reply(200, loadedResources.sourceHTML)
       .persist()
       .get('/assets/professions/nodejs.png')
-      .reply(200, initData.expectedImage)
+      .reply(200, loadedResources.image)
       .get('/assets/application.css')
-      .reply(200, initData.expectedCSS)
+      .reply(200, loadedResources.css)
       .get('/packs/js/runtime.js')
-      .reply(200, initData.expectedScript)
+      .reply(200, loadedResources.script)
     const directory = '/sys'
     await expect(
       loadHTML(initData.hexletUrl, directory),
@@ -170,11 +171,11 @@ describe('negative', () => {
   test('400 code, Content loading, default user path', async () => {
     nock('https://ru.hexlet.io:443')
       .get('/courses')
-      .reply(200, initData.sourceHTML)
+      .reply(200, loadedResources.sourceHTML)
       .get('/assets/application.css')
-      .reply(200, initData.expectedCSS)
+      .reply(200, loadedResources.css)
       .get('/packs/js/runtime.js')
-      .reply(200, initData.expectedScript)
+      .reply(200, loadedResources.script)
       .get('/assets/professions/nodejs.png')
       .reply(400, { error: { message: 'Bad request' } })
     const receivedHTMLPathObj = await loadHTML(initData.hexletUrl)
