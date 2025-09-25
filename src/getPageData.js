@@ -10,9 +10,14 @@ const getHTML = async (url) => {
     const response = await axios.get(url)
     return response.data
   }
-  catch {
+  catch (response) {
     console.error(`HTML page for ${url} could not be loaded`)
-    throw new Error('HTML loading error!')
+    if (!response.status) {
+      throw new Error(`HTML loading error! No connection`)
+    }
+    else {
+      throw new Error(`HTML loading error! ${response.status} status`)
+    }
   }
 }
 
