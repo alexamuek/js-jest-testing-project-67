@@ -147,6 +147,9 @@ describe('negative', () => {
     const cleanedActualPage = _.replace(actualPage, /[\s]/g, '')
     const cleanedExpectedPage = _.replace(loadedResources.expectedPageNotFull, /[\s]/g, '')
     expect(cleanedActualPage).toEqual(cleanedExpectedPage)
+    const resourcesFolderPath = path.join(initData.defaultPath, initData.outputContentFolder)
+    await fs.rm(resourcesFolderPath, { recursive: true })
+    await fs.rm(actualPageInfo.filepath)
   })
 
   test('no connection', async () => {
