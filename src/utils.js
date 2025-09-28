@@ -17,7 +17,7 @@ const getHTTPLinkToDownload = (src, targetURLobj) => {
 
 const makeLocalSrcLink = (contentUrl, contentFolder) => {
   const extentionOrNull = path.extname(contentUrl.pathname).replace('.', '')
-  const extention = !extentionOrNull ? 'html' : extentionOrNull
+  const extention = extentionOrNull || 'html'
   const URLWithoutExt = extention === 'html' ? contentUrl.href : contentUrl.href.substring(0, contentUrl.href.lastIndexOf('.'))
   const withoutHTTP = URLWithoutExt.substring(URLWithoutExt.indexOf('//') + 2)
   const fileName = `${_.replace(withoutHTTP, /[^0-9a-zA-Z]/g, '-')}.${extention}`
