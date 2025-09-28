@@ -12,11 +12,11 @@ const getHTML = async (url) => {
   }
   catch (response) {
     console.error(`HTML page for ${url} could not be loaded`)
-    if (!response.status) {
-      throw new Error(`HTML loading error! No connection`)
+    if (response.status) {
+      throw new Error(`HTML loading error! ${response.status} status`)
     }
     else {
-      throw new Error(`HTML loading error! ${response.status} status`)
+      throw new Error(`HTML loading error! No connection`)
     }
   }
 }
