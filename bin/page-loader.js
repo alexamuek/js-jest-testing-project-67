@@ -5,9 +5,10 @@ import loadHTML from '../src/index.js'
 
 const defaultPath = './'
 
-const main = async (url, output = defaultPath) => {
+const main = async (url, output = defaultPath, cb) => {
   const pathObj = await loadHTML(url, output)
   console.log(`Page was successfully downloaded into ${pathObj.filepath}`)
+  cb
 }
 
 program
