@@ -5,10 +5,10 @@ import loadHTML from '../src/index.js'
 
 const defaultPath = './'
 
-const main = async (url, output = defaultPath, cb) => {
+const main = async (url, output = defaultPath) => {
   const pathObj = await loadHTML(url, output)
   console.log(`Page was successfully downloaded into ${pathObj.filepath}`)
-  cb
+  process.exit(0)
 }
 
 program
@@ -17,7 +17,7 @@ program
   .version('1.0.0')
   .option('-o, --output <path>', `output dir (default: "${defaultPath}")`)
   .action((url, options) => {
-    main(url, options.output, () => process.exit(0))
+    main(url, options.output)
   })
 program.parse()
 
