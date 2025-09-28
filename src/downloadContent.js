@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio'
-import path from 'path'
+import path from 'node:path'
 import debug from 'debug'
 import { getContent } from './getPageData.js'
 import { createFile } from './handleFilesTasks.js'
@@ -21,7 +21,6 @@ const downloadAndUpdateHTML = async (filePath, url, $tag, srcName, newLink) => {
     $tag.attr(srcName, newLink)
     await createFile(filePath, content)
   }
-  return
 }
 
 const downloadContent = async (html, contentPath, targetURL, contentFolder) => {
